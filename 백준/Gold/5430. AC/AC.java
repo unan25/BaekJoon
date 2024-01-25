@@ -13,7 +13,7 @@ import java.util.*;
         [1,2,3,4]
         R : [4, 3, 2, 1] -> D : [3, 2, 1] -> D : [2, 1] = result
 
-        17:25 ~ 18:05
+        17:25 ~ 18:35
  */
 public class Main {
     public static void main(String[] args) throws IOException {
