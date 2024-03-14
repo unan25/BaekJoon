@@ -3,48 +3,46 @@ import java.util.*;
 
 public class Main {
 
-    static int[] dx = {0, 1, 0, -1}; // 우 좌
-    static int[] dy = {1, 0, -1, 0}; // 하 상
+    static int n;
     static boolean[][] visited;
     static int[][] arr;
-    static int N;
-    static int count;
-    static StringBuilder sb = new StringBuilder();
-
+    static int[] dx = {0, 1, 0, -1};
+    static int[] dy = {1, 0, -1, 0};
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
 
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        n = Integer.parseInt(br.readLine());
 
-        N = Integer.parseInt(st.nextToken());
+        visited = new boolean[n][n];
+        arr = new int[n][n];
 
-        arr = new int[N][N];
-        visited = new boolean[N][N];
-
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < n; i++) {
             String line = br.readLine();
-            for (int j = 0; j < N; j++) {
+            for (int j = 0; j < n; j++) {
                 arr[i][j] = Integer.parseInt(line.substring(j, j + 1));
             }
         }
 
-        count = 0;
         List<Integer> list = new ArrayList<>();
-        for (int a = 0; a < N; a++) {
-            for (int b = 0; b < N; b++) {
-                if (!visited[a][b] && arr[a][b] == 1) {
+
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (arr[i][j] == 1 && !visited[i][j]) {
                     count++;
-                    list.add(BFS(a, b));
+                    list.add(dfs(i, j));
                 }
             }
         }
         sb.append(count).append("\n");
 
         Collections.sort(list);
-        for (Integer integer : list) {
-            sb.append(integer).append("\n");
+
+        for (Integer i : list) {
+            sb.append(i).append("\n");
         }
 
         bw.write(sb.toString().trim());
@@ -54,30 +52,23 @@ public class Main {
         br.close();
     } // main()
 
+    private static int dfs(int i, int j) {
+        visited[i][j] = true;
 
-    private static int BFS(int i, int j) {
-        Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[]{i, j});
-        visited[i][j] = true; // 방문 기록
-        int cnt = 1; // 35번째줄 이중 for문을 통해 단지들을 탐색했기 때문에 1부터 시작
+        int apartments = 1; // 단지 내의 집의 수 변수
 
-        while (!queue.isEmpty()) {
-            int[] now = queue.poll();
+        for (int k = 0; k < 4; k++) {
+            int x = i + dx[k];
+            int y = j + dy[k];
 
-            for (int k = 0; k < 4; k++) { // 상하좌우 탐색 dx, dy
-                int x = now[0] + dx[k]; // 좌우
-                int y = now[1] + dy[k]; // 상하
-
-                if (x >= 0 && y >= 0 && x < N && y < N) { // 배열 범위를 넘어가면 안됨, 좌표 유효성 검사
-                    if (arr[x][y] != 0 && !visited[x][y]) { // 0이 아니거나, 방문하지 않은 노드인 경우
-                        visited[x][y] = true;
-                        cnt++;
-                        queue.add(new int[]{x, y});
-                    } // if()
-                } // if()
-            } // for(k)
-        } // while()
-        return cnt;
-    } // BFS(0
+            if (x >= 0 && y >= 0 && x < n && y < n) {
+                if (arr[x][y] != 0 && !visited[x][y]) {
+                    apartments += dfs(x, y); // DFS 호출
+                }
+            }
+        }
+        return apartments;
+    }
 
 } // Main()
+
