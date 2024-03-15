@@ -1,83 +1,79 @@
 import java.io.*;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-
-    static int m, n;
-    static boolean[][] visited;
+    static int M, N;
     static int[][] box;
-    static int[] dx = {0, 1, 0, -1};
-    static int[] dy = {1, 0, -1, 0};
-    static Queue<int[]> queue = new LinkedList<>();
+    static boolean[][] visited;
+    static Queue<Point> queue = new LinkedList<>();
+    static int[] dx = {1, -1, 0, 0};
+    static int[] dy = {0, 0, 1, -1};
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        
+        M = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
 
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-        m = Integer.parseInt(st.nextToken());
-        n = Integer.parseInt(st.nextToken());
+        box = new int[N][M];
+        visited = new boolean[N][M];
 
-        visited = new boolean[n][m];
-        box = new int[n][m];
-
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < m; j++) {
+            for (int j = 0; j < M; j++) {
                 box[i][j] = Integer.parseInt(st.nextToken());
-                if (box[i][j] == 1) {
-                    queue.offer(new int[]{i, j});
-                }
+                if (box[i][j] == 1)
+                    queue.offer(new Point(i, j));
             }
         }
 
         int days = bfs();
-        if (checkAll()) {
+        if (checkAll())
             System.out.println(days);
-        } else {
+        else
             System.out.println(-1);
-        }
+    }
 
-//        bw.flush();
-//        bw.close();
-        br.close();
-    } // main()
-
-    private static int bfs() {
+    static int bfs() {
         int days = 0;
 
         while (!queue.isEmpty()) {
             int size = queue.size();
-
             for (int i = 0; i < size; i++) {
-                int[] now = queue.poll();
+                Point cur = queue.poll();
 
                 for (int j = 0; j < 4; j++) {
-                    int x = now[0] + dx[j];
-                    int y = now[1] + dy[j];
+                    int nx = cur.x + dx[j];
+                    int ny = cur.y + dy[j];
 
-                    if (x >= 0 && y >= 0 && x < n && y < m && box[x][y] == 0) {
-                        box[x][y] = 1;
-                        queue.offer(new int[]{x, y});
+                    if (nx >= 0 && ny >= 0 && nx < N && ny < M && box[nx][ny] == 0) {
+                        box[nx][ny] = 1;
+                        queue.offer(new Point(nx, ny));
                     }
                 }
             }
             days++;
         }
+
         return days - 1;
-    } // bfs()
+    }
 
     static boolean checkAll() {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (box[i][j] == 0) {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (box[i][j] == 0)
                     return false;
-                }
             }
         }
         return true;
-    } // checkAll()
+    }
+}
 
-} // Main()
+class Point {
+    int x, y;
+    Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
