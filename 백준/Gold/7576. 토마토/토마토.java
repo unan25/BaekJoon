@@ -14,7 +14,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+//        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         StringTokenizer st = new StringTokenizer(br.readLine(), " ");
         m = Integer.parseInt(st.nextToken());
@@ -35,13 +35,13 @@ public class Main {
 
         int days = bfs();
         if (checkAll()) {
-            bw.write(String.valueOf(days));
+            System.out.println(days);
         } else {
-            bw.write("-1");
+            System.out.println(-1);
         }
 
-        bw.flush();
-        bw.close();
+//        bw.flush();
+//        bw.close();
         br.close();
     } // main()
 
