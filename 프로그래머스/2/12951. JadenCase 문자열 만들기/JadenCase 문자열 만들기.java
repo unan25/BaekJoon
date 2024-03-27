@@ -1,17 +1,21 @@
-import java.util.StringTokenizer;
+class Solution {
+    public String solution(String s) {
+        String answer = "";
+        String[] sp = s.split(" ");
 
-    class Solution {
-        public String solution(String s) {
-            String answer = "";
-            s = s.toLowerCase();
-            StringTokenizer st = new StringTokenizer(s, " ", true);
-            StringBuilder sb = new StringBuilder();
-
-            while (st.hasMoreTokens()){
-                String word = st.nextToken();
-                sb.append(word.substring(0,1).toUpperCase()).append(word.substring(1));
+        for (int i = 0; i < sp.length; i++) {
+            if (sp[i].length() == 0) {
+                answer += " ";
             }
-            answer = sb.toString();
-            return answer;
+            else {
+                answer += sp[i].substring(0, 1).toUpperCase();
+                answer += sp[i].substring(1, sp[i].length()).toLowerCase();
+                answer += " ";
+            }
+
         }
+        if (s.substring(s.length() - 1, s.length()).equals(" ")) return answer;
+        
+        return answer.substring(0, answer.length() - 1);
     }
+}
